@@ -17,13 +17,13 @@ dc = ['because', 'since', 'when', 'thus', 'however', 'although', 'for example', 
 
 file = open(sys.argv[1], 'r')
 data = file.read()
-data = data.replace('\n[.]*', '. ')
 data = data.replace('\n', '. ')
 data = data.replace('\t', ' ')
 data = re.sub(' +', ' ', data)
 datab = TextBlob(data)
 
 subs = utils.splitsubs(datab)
+# print(subs)
 
 superdf = pd.DataFrame([], columns = ['sentence', 'f','sim', 'abb','super', 'pos', 'discon', 'l', 'n', 'pn', 'score'])
 for sub in subs:
@@ -39,7 +39,6 @@ for sub in subs:
 
 	df = pd.DataFrame(featsl, columns = ['sentence', 'f','sim', 'abb','super', 'pos', 'discon', 'l', 'n', 'pn'])
 	superdf = pd.concat([superdf, df], sort = False)
-# print(superdf.describe())
 X = superdf[['f','sim', 'abb','super', 'pos', 'discon', 'l', 'n', 'pn']]
 predictions = None
 if sys.argv[2] == 'b':
@@ -49,11 +48,11 @@ if sys.argv[2] == 'b':
 elif sys.argv[2] == 'c':
 		model = joblib.load('chem.joblib.dat')
 		predictions = model.predict(X)
-		a = 0.3
+		a = 0.13
 elif sys.argv[2] == 'p':
 		model = joblib.load('phy.joblib.dat')
 		predictions = model.predict(X)
-		a = 0.1
+		a = 0.14
 
 stop2 = ['as', 'i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves',
 'this','that']
@@ -93,21 +92,20 @@ score = {}
 for s in tf:
 	score[s] = tf[s] * idf[s]
 smax = score[max(score)]
-for s in score:
-	score[s] /= smax
+print(score)
 if sys.argv[2] == 'b':
-		model = joblib.load('bio.joblib.dat')
-		predictions = model.predict(X)
-		b = 0.3
-		c = 0.8
+	model = joblib.load('bio.joblib.dat')
+	predictions = model.predict(X)
+	for s in score:
+		score[s] /= smax
+	b = 0.3
+	c = 0.8
 elif sys.argv[2] == 'c':
-		model = joblib.load('chem.joblib.dat')
-		predictions = model.predict(X)
-		a = 0.3
+	b = smax/3
+	c = smax/1.8
 elif sys.argv[2] == 'p':
-		model = joblib.load('phy.joblib.dat')
-		predictions = model.predict(X)
-
+	b = smax/3
+	c = smax/1.5
 output = []
 for s in impsen:
 	outs = {}
