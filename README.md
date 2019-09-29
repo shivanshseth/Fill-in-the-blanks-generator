@@ -4,7 +4,7 @@ pip3 -r requirements.txt
 
 python3 main.py [path to input text file] arg2
 
-Where 
+Where:
       
       arg2 = c for chemistry text
 
