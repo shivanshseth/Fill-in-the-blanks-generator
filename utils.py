@@ -29,11 +29,12 @@ def splitsubs(ww2b):
     ign = ['fig.','table', 'example', '•', 'activity', '=', '+']
     subs = []
     sub = []
-    st = ''
+    st = []
     f = 0
     for s in ww2b.sentences:
         s2 = str(s)
-        if re.search('^[0-9]\.[0-9].*[A-Z]+.*',s2 ):
+        # print(s2)
+        if re.search('^[0-9]*\.[0-9].*[A-Z]+.*',s2 ):
             if st:
                 sub.append(st)
                 subs.append(sub)
@@ -48,6 +49,7 @@ def splitsubs(ww2b):
             if f2 == 0 and len(s2) > 10:
                 st.append(s)
     sub.append(st)
+    # print(sub)
     subs.append(sub)
     return subs
 
@@ -62,6 +64,8 @@ def sim(sb, headb):
     l = len(clean_puncs(clean_stop(str(sb))).split(' '))
     return c/l
 def gen_features(sub):
+    if(len(sub) < 2):
+        return []
     headb = sub[0]
     cont = sub[1]
     head = str(headb)
