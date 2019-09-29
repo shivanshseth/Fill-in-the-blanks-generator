@@ -45,12 +45,15 @@ predictions = None
 if sys.argv[2] == 'b':
 		model = joblib.load('bio.joblib.dat')
 		predictions = model.predict(X)
+		a = 0.4
 elif sys.argv[2] == 'c':
 		model = joblib.load('chem.joblib.dat')
 		predictions = model.predict(X)
+		a = 0.3
 elif sys.argv[2] == 'p':
 		model = joblib.load('phy.joblib.dat')
 		predictions = model.predict(X)
+		a = 0.1
 
 stop2 = ['as', 'i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves',
 'this','that']
@@ -58,7 +61,7 @@ m = max(predictions)
 impsen = []
 predictions = predictions/m
 for i in range(len(predictions)):
-    if predictions[i] > 0.1:
+    if predictions[i] > a:
         s = superdf.iloc[i][0]
         # print('YEET',s)
         if not (re.search('[?!]$', s) or s.split(' ')[0].lower() in (dc + stop2) or 'fig.' in s.lower()):
@@ -92,6 +95,18 @@ for s in tf:
 smax = score[max(score)]
 for s in score:
 	score[s] /= smax
+if sys.argv[2] == 'b':
+		model = joblib.load('bio.joblib.dat')
+		predictions = model.predict(X)
+		b = 0.3
+		c = 0.8
+elif sys.argv[2] == 'c':
+		model = joblib.load('chem.joblib.dat')
+		predictions = model.predict(X)
+		a = 0.3
+elif sys.argv[2] == 'p':
+		model = joblib.load('phy.joblib.dat')
+		predictions = model.predict(X)
 
 output = []
 for s in impsen:
@@ -101,7 +116,7 @@ for s in impsen:
 	for w in sb.tags:
 		if w[1] in ['NN', 'NNS', 'NNP', 'NNPS', 'JJ', 'JJR', 'JJS', 'CD']:
 			if w[0].lower() in score:
-				if score[w[0].lower()] > 0.3 and score[w[0].lower()] < 0.8:
+				if score[w[0].lower()] > 0 and score[w[0].lower()] < 1/smax:
 					wl.add(w[0].lower())
 	outs['text'] = s
 	outs['fibs'] = wl
