@@ -114,7 +114,7 @@ for s in impsen:
 	for w in sb.tags:
 		if w[1] in ['NN', 'NNS', 'NNP', 'NNPS', 'JJ', 'JJR', 'JJS', 'CD']:
 			if w[0].lower() in score:
-				if score[w[0].lower()] > 0 and score[w[0].lower()] < 1/smax:
+				if score[w[0].lower()] > b and score[w[0].lower()] < c:
 					wl.add(w[0].lower())
 	outs['text'] = s
 	outs['fibs'] = wl
