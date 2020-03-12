@@ -65,7 +65,7 @@ Pillow==6.2.0
 prometheus-client==0.5.0
 prompt-toolkit==1.0.15
 protobuf==3.6.1
-psutil==5.5.1
+psutil==5.6.6
 pycairo==1.16.2
 pycodestyle==2.4.0
 pycups==1.9.73
